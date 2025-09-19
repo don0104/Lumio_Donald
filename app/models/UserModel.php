@@ -16,5 +16,32 @@ class UserModel extends Model {
     }
     
   
+    public function page($q, $records_per_page = null, $page = null) {
+            if (is_null($page)) {
+                return $this->db->table('users')->all();
+            } else {
+                $query = $this->db->table('users');
+                
+                // Build LIKE conditions
+                $query->like('id', '%'.$q.'%')
+                    ->or_like('first_name', '%'.$q.'%')
+                    ->or_like('last_name', '%'.$q.'%')
+                    ->or_like('birthdate', '%'.$q.'%')
+                    ->or_like('email', '%'.$q.'%')
+                    ->or_like('added', '%'.$q.'%');
+
+                // Clone before pagination
+                $countQuery = clone $query;
+
+                $data['total_rows'] = $countQuery->select_count('*', 'count')
+                                                ->get()['count'];
+
+                $data['records'] = $query->pagination($records_per_page, $page)
+                                        ->all();
+
+                return $data;
+            }
+        }
+
    
 }

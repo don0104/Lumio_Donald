@@ -326,6 +326,8 @@
             <a href="<?= site_url('user/create') ?>" class="add-user-btn">
                 <span>+</span> Add New User
             </a>
+        <input class="form-control me-2" name="q" type="text" placeholder="Search" value="<?=html_escape($q);?>">
+        <button type="submit" class="btn btn-primary" type="button">Search</button>
         </div>
         
         <div class="stats-grid">
@@ -397,5 +399,7 @@
             </fieldset>
         </div>
     </div>
+    <?php
+	echo $page;?>
 </body>
 </html>
