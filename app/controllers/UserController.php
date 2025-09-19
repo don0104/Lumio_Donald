@@ -28,7 +28,7 @@ class UserController extends Controller {
             ];
 
             $this->UserModel->insert($data);
-            redirect('/');
+            redirect('/user/create');
             
         }else {
             $this->call->view('user/create');
