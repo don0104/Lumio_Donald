@@ -55,6 +55,6 @@ class UserController extends Controller {
     public function delete($id)
     {
         $this->UserModel->delete($id);
-        redirect('/');
+        redirect('user/delete');
     }
 }
