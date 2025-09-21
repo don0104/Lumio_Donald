@@ -175,6 +175,39 @@
       }
       .actions { display: flex; gap: 10px; padding: 8px 16px; }
     }
+
+    /* PAGINATION STYLES */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin-top: 20px;
+      padding: 20px;
+    }
+    
+    .pagination a, .pagination span {
+      padding: 8px 12px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      border: 1px solid var(--border);
+      color: var(--text);
+      background-color: var(--card);
+    }
+    
+    .pagination a:hover {
+      background-color: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+    
+    .pagination .active {
+      background-color: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
   </style>
 </head>
 <body>
@@ -183,8 +216,8 @@
       <h1 class="title">User Directory</h1>
       <div class="actions-top">
         <a href="<?= site_url('user/create') ?>" class="add-user-btn">+ Add User</a>
-        <form class="search-group" method="get" action="">
-          <input name="q" type="text" placeholder="Search" value="<?=html_escape($q);?>">
+        <form class="search-group" method="get" action="<?= site_url('user/all') ?>">
+          <input name="q" type="text" placeholder="Search" value="<?= html_escape($this->io->get('q') ?? '') ?>">
           <button type="submit">Search</button>
         </form>
       </div>
@@ -192,12 +225,12 @@
 
     <div class="stats-grid">
       <div class="stat-card">
-        <div class="stat-number"><?= is_array($users) ? count($users) : 0; ?></div>
+        <div class="stat-number"><?= isset($total_rows) ? $total_rows : (is_array($all) ? count($all) : 0); ?></div>
         <div class="stat-label">Total Users</div>
       </div>
       <div class="stat-card">
-        <div class="stat-number"><?= is_array($users) ? count($users) : 0; ?></div>
-        <div class="stat-label">Active Users</div>
+        <div class="stat-number"><?= is_array($all) ? count($all) : 0; ?></div>
+        <div class="stat-label">Showing</div>
       </div>
     </div>
 
@@ -216,27 +249,35 @@
               </tr>
             </thead>
             <tbody>
-              <?php foreach (html_escape($users) as $user): ?>
-              <tr>
-                <td data-label="ID"><?= $user['id']; ?></td>
-                <td data-label="Username"><?= $user['username']; ?></td>
-                <td data-label="Email"><?= $user['email']; ?></td>
-                <td data-label="Status">
-                  <span style="color:#10b981;font-weight:600;">Active</span>
-                </td>
-                <td data-label="Action">
-                  <div class="actions">
-                    <a href="<?= site_url('user/update/'.$user['id']); ?>">✏️ Edit</a>
-                    <a href="<?= site_url('user/delete/'.$user['id']); ?>" onclick="return confirm('Are you sure?');">🗑️ Delete</a>
-                  </div>
-                </td>
-              </tr>
-              <?php endforeach; ?>
+              <?php if (isset($all) && is_array($all) && !empty($all)): ?>
+                <?php foreach (html_escape($all) as $user): ?>
+                <tr>
+                  <td data-label="ID"><?= $user['id']; ?></td>
+                  <td data-label="Username"><?= $user['username']; ?></td>
+                  <td data-label="Email"><?= $user['email']; ?></td>
+                  <td data-label="Status">
+                    <span style="color:#10b981;font-weight:600;">Active</span>
+                  </td>
+                  <td data-label="Action">
+                    <div class="actions">
+                      <a href="<?= site_url('user/update/'.$user['id']); ?>">✏️ Edit</a>
+                      <a href="<?= site_url('user/delete/'.$user['id']); ?>" onclick="return confirm('Are you sure?');">🗑️ Delete</a>
+                    </div>
+                  </td>
+                </tr>
+                <?php endforeach; ?>
+              <?php else: ?>
+                <tr>
+                  <td colspan="5" style="text-align: center; padding: 40px; color: #666;">
+                    No users found
+                  </td>
+                </tr>
+              <?php endif; ?>
             </tbody>
           </table>
         </div>
         <div class="footer">
-          <div>Showing <?= is_array($users) ? count($users) : 0; ?> users</div>
+          <div>Showing <?= is_array($all) ? count($all) : 0; ?> of <?= isset($total_rows) ? $total_rows : 0; ?> users</div>
           <div>Last updated: <?= date('M d, Y H:i'); ?></div>
         </div>
       </fieldset>

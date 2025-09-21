@@ -10,8 +10,8 @@ class UserController extends Controller {
 
     public function index()
     {
-        $data['users'] = $this->UserModel->all();
-        $this->call->view('user/view', $data);
+        // Redirect to all method for pagination
+        redirect('user/all');
     }
 
     public function create()
@@ -22,7 +22,7 @@ class UserController extends Controller {
                 'email'    => $this->io->post('email')
             ];
             $this->UserModel->insert($data);
-            redirect('user/view'); // balik sa list after insert
+            redirect('user/all'); // balik sa list after insert
         } else {
             $this->call->view('user/create');
         }
@@ -38,7 +38,7 @@ class UserController extends Controller {
                 'email'    => $this->io->post('email')
             ];
             $this->UserModel->update($id, $updateData);
-            redirect('/user'); // balik sa list
+            redirect('user/all'); // balik sa list
         } else {
             $this->call->view('user/update', $data);
         }
@@ -47,7 +47,7 @@ class UserController extends Controller {
     public function delete($id)
     {
         $this->UserModel->delete($id);
-        redirect('user/view'); // balik sa list after delete
+        redirect('user/all'); // balik sa list after delete
     }
 
     public function all() 
@@ -73,7 +73,8 @@ class UserController extends Controller {
         $this->pagination->initialize($total_rows, $records_per_page, $page, site_url('user/all').'?q='.$q);
 
         $data['page'] = $this->pagination->paginate();
+        $data['total_rows'] = $total_rows;
 
-        $this->call->view('user/all', $data);
+        $this->call->view('user/view', $data);
     }
 }
