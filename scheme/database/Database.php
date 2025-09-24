@@ -238,6 +238,23 @@ class Database {
             PDO::ATTR_EMULATE_PREPARES   => false,
         );
 
+        // If MySQL with SSL is required (e.g., Aiven), attach CA if available
+        if ($driver === 'mysql') {
+            $envCa = getenv('DB_SSL_CA');
+            $defaultCaPath = defined('APP_DIR') ? APP_DIR . 'certs' . DIRECTORY_SEPARATOR . 'ca.pem' : null;
+            $caPath = !empty($envCa) ? $envCa : ($defaultCaPath && file_exists($defaultCaPath) ? $defaultCaPath : null);
+
+            if (!empty($caPath)) {
+                // Suppress verify in dev if needed; comment out the line below to enforce full verification
+                if (defined('PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT')) {
+                    $options[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = false;
+                }
+                if (defined('PDO::MYSQL_ATTR_SSL_CA')) {
+                    $options[PDO::MYSQL_ATTR_SSL_CA] = $caPath;
+                }
+            }
+        }
+
         try {
             $this->db = new PDO($dsn, $username, $password, $options);
              $this->driver = $this->db->getAttribute(PDO::ATTR_DRIVER_NAME);

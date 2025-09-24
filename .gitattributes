@@ -1,0 +1,7 @@
+# Keep certificate files with LF endings (avoid CRLF conversion on Windows)
+app/certs/*.pem text eol=lf
+
+# Optional: common text files with LF
+*.sh text eol=lf
+Dockerfile text eol=lf
+
