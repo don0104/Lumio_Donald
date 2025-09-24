@@ -22,12 +22,10 @@ class UserModel extends Model {
         } else {
             $query = $this->db->table('users');
             
-            // Build LIKE conditions
+            // Build LIKE conditions (limit to existing columns)
             $query->like('id', '%'.$q.'%')
                 ->or_like('username', '%'.$q.'%')
-                ->or_like('email', '%'.$q.'%')
-                ->or_like('created_at', '%'.$q.'%')
-                ->or_like('updated_at', '%'.$q.'%');
+                ->or_like('email', '%'.$q.'%');
 
             // Clone before pagination
             $countQuery = clone $query;
