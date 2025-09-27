@@ -79,4 +79,37 @@ class UserController extends Controller {
         $data['page'] = $this->pagination->paginate();
         $this->call->view('user/view', $data);
     }
+
+    // AJAX endpoint for real-time search
+    public function search_ajax()
+    {
+        // Check if it's an AJAX request
+        if (!$this->io->is_ajax()) {
+            show_404();
+            return;
+        }
+
+        $q = '';
+        if(isset($_GET['q']) && ! empty($_GET['q'])) {
+            $q = trim($this->io->get('q'));
+        }
+
+        $page = 1;
+        if(isset($_GET['page']) && ! empty($_GET['page'])) {
+            $page = $this->io->get('page');
+        }
+
+        $records_per_page = 10;
+        $all = $this->UserModel->page($q, $records_per_page, $page);
+        
+        // Return JSON response
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => true,
+            'data' => $all['records'],
+            'total_rows' => $all['total_rows'],
+            'current_page' => $page,
+            'records_per_page' => $records_per_page
+        ]);
+    }
 }
