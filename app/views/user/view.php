@@ -89,27 +89,44 @@
 				tableBody.classList.add('search-loading');
 				
 				// Make AJAX request
-				fetch(`<?=site_url('user/search_ajax');?>?q=${encodeURIComponent(query)}`, {
+				const searchUrl = `<?=site_url('user/search_ajax');?>?q=${encodeURIComponent(query)}`;
+				console.log('Searching:', searchUrl);
+				
+				fetch(searchUrl, {
 					method: 'GET',
 					headers: {
-						'X-Requested-With': 'XMLHttpRequest',
-						'Content-Type': 'application/json'
+						'X-Requested-With': 'XMLHttpRequest'
 					}
 				})
-				.then(response => response.json())
-				.then(data => {
-					tableBody.classList.remove('search-loading');
-					
-					if (data.success) {
-						updateTable(data.data);
-					} else {
-						showNoResults();
+				.then(response => {
+					console.log('Response status:', response.status);
+					if (!response.ok) {
+						throw new Error(`HTTP error! status: ${response.status}`);
+					}
+					return response.text(); // Get as text first to debug
+				})
+				.then(text => {
+					console.log('Raw response:', text);
+					try {
+						const data = JSON.parse(text);
+						tableBody.classList.remove('search-loading');
+						
+						if (data.success) {
+							updateTable(data.data);
+						} else {
+							showNoResults();
+						}
+					} catch (e) {
+						console.error('JSON parse error:', e);
+						console.error('Response text:', text);
+						tableBody.classList.remove('search-loading');
+						showNoResults('Invalid response from server');
 					}
 				})
 				.catch(error => {
 					tableBody.classList.remove('search-loading');
 					console.error('Search error:', error);
-					showNoResults('Error occurred while searching');
+					showNoResults('Error occurred while searching: ' + error.message);
 				});
 			}
 
@@ -171,4 +188,5 @@
 		});
 	</script>
 </body>
+</html>
 </html>
