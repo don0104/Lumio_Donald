@@ -58,12 +58,12 @@ class UserController extends Controller {
             redirect('user/login');
         }
 
-        // Get user statistics
-        $users_data = $this->UserModel->page('', 5, 1);
+        // Get user statistics from auth_users
+        $users_data = $this->AuthModel->page('', 5, 1);
         $data['recent_users'] = $users_data['records'];
         $data['total_users'] = $users_data['total_rows'];
         $data['user'] = $this->get_current_user();
-        
+
         $this->call->view('user/admin_dashboard', $data);
     }
 
