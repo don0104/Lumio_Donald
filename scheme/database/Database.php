@@ -202,6 +202,7 @@ class Database {
                 throw new PDOException('No active configuration for this database.');
             }
         }
+        error_log('Database config loaded: host=' . $database_config['hostname'] . ' db=' . $database_config['database']);
         $this->dbprefix = $database_config['dbprefix'];
         $driver = strtolower($database_config['driver']);
         $charset = $database_config['charset'];
@@ -257,8 +258,10 @@ class Database {
 
         try {
             $this->db = new PDO($dsn, $username, $password, $options);
-             $this->driver = $this->db->getAttribute(PDO::ATTR_DRIVER_NAME);
+              $this->driver = $this->db->getAttribute(PDO::ATTR_DRIVER_NAME);
+              error_log('Database connected successfully');
         } catch (Exception $e) {
+            error_log('Database connection failed: ' . $e->getMessage());
             throw new PDOException($e->getMessage());
         }
     }
