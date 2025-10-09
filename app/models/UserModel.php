@@ -43,6 +43,31 @@ class UserModel extends Model {
         return $data;
     }
 
+    // moved auth-centric helpers to AuthModel
+    /**
+     * Check user permission
+     */
+    public function has_permission($user_id, $required_role = 'user')
+    {
+        $user = $this->find($user_id);
+        
+        if (!$user) {
+            return false;
+        }
+        
+        $role_hierarchy = ['user' => 1, 'moderator' => 2, 'admin' => 3];
+        
+        $user_level = $role_hierarchy[$user['role']] ?? 0;
+        $required_level = $role_hierarchy[$required_role] ?? 0;
+        
+        return $user_level >= $required_level;
+    }
+    
+    /**
+     * Increment failed login attempts
+     */
+    // moved to AuthModel
+
 
    
 }

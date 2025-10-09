@@ -80,7 +80,7 @@ $config['ENVIRONMENT']             = 'development';
 |
 */
 $config['base_url'] 				= 'https://lumiodonald.onrender.com/';
-
+//https://lumiodonald.onrender.com/
 /*
 |--------------------------------------------------------------------------
 | Index File

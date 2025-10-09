@@ -43,9 +43,31 @@ defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
 |
 */
 
-$router->get('/', 'UserController::index');
+// Default route - redirect to auth login
+$router->get('/', 'AuthController::index');
+
+// Authentication routes (moved to AuthController)
+$router->match('/auth/login', 'AuthController::login', ['GET', 'POST']);
+$router->match('/auth/register', 'AuthController::register', ['GET', 'POST']);
+$router->get('/auth/logout', 'AuthController::logout');
+
+// Backward-compatible aliases
+$router->match('/user/login', 'AuthController::login', ['GET', 'POST']);
+$router->match('/user/register', 'AuthController::register', ['GET', 'POST']);
+$router->get('/user/logout', 'AuthController::logout');
+$router->get('/user/dashboard', 'UserController::dashboard');
+$router->get('/user/admin_dashboard', 'UserController::admin_dashboard');
+
+// Dashboard shortcuts
+$router->get('/dashboard', 'UserController::dashboard');
+$router->get('/admin', 'UserController::admin_dashboard');
+
+// User management routes (existing)
 $router->get('/user/all', 'UserController::all');
 $router->get('/user/search_ajax', 'UserController::search_ajax');
 $router->match('/user/create', 'UserController::create', ['GET', 'POST']);
 $router->match('/user/update/{id}', 'UserController::update', ['GET', 'POST']);
 $router->get('/user/delete/{id}', 'UserController::delete');
+
+// Auth users routes (separate view)
+$router->get('/auth_users/all', 'AuthUserController::all');

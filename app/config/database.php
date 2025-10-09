@@ -68,5 +68,18 @@ $database['main'] = array(
     'dbprefix'  => '',
     'path'      => '' // optional for SQLite
 );
+/*
+$database['main'] = array(
+    'driver'    => 'mysql',
+    'hostname'  => 'localhost',
+    'port'      => '3306',
+    'username'  => 'root',
+    'password'  => '',
+    'database'  => 'mockdata',
+    'charset'   => 'utf8mb4',
+    'dbprefix'  => '',
+    'path'      => '' // optional for SQLite
+); 
+*/
 
 ?>

@@ -25,8 +25,8 @@
         <input id="searchInput" class="form-control me-2" type="text" placeholder="Search users..." value="<?=html_escape($q);?>" autocomplete="off">
         <button id="searchBtn" class="btn btn-primary" type="button">Search</button>
 	</div>
-	<div class="d-flex align-items-center mb-2">
-		<h2 class="me-auto mb-0">User Lists</h2>
+    <div class="d-flex align-items-center mb-2">
+        <h2 class="me-auto mb-0">User Lists</h2>
 		<a href="<?=site_url('user/create');?>" class="btn btn-primary">+ Create User</a>
 	</div>
 	<table class="table table-striped">
@@ -55,6 +55,8 @@
 	<?php
 	echo $page;?>
 	</div>
+
+    
 
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 	<script>

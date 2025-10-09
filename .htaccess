@@ -1,6 +1,6 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteBase /
+    RewriteBase /web2/Activity3/Lumio_Donald/
 
     # Forward requests to index.php while preserving URI segments
     RewriteCond %{REQUEST_FILENAME} !-f
