@@ -53,6 +53,8 @@ list($codeExcerpt, $excerptStart) = get_code_excerpt($filepath, $line);
 <head>
     <meta charset="UTF-8">
     <title>⚠️ PHP Error</title>
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>">
+    <link rel="shortcut icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>">
     <style>
         * { box-sizing: border-box; }
 

@@ -43,6 +43,7 @@ class UserModel extends Model {
         return $data;
     }
 
+
     // moved auth-centric helpers to AuthModel
     /**
      * Check user permission

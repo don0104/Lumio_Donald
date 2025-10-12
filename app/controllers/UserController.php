@@ -1,7 +1,12 @@
 <?php
 defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
 
-class UserController extends Controller {
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+class UserController extends Controller
+{
     public function __construct()
     {
         parent::__construct();
@@ -20,6 +25,7 @@ class UserController extends Controller {
         return isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true;
     }
 
+    // list - everyone
     public function index()
     {
         // Redirect to login if not authenticated, otherwise to dashboard
@@ -30,11 +36,25 @@ class UserController extends Controller {
         }
     }
 
-    // moved to AuthController::login
+    // view individual user - everyone
+    public function view($id)
+    {
+        if (!$this->is_logged_in()) {
+            redirect('user/login');
+        }
 
-    // moved to AuthController::register
+        $data['user'] = $this->get_current_user();
+        $data['view_user'] = $this->UserModel->find($id);
+        $data['is_admin'] = $this->has_permission('admin');
 
-    // moved to AuthController::logout
+        // Debug: Check if user was found
+        if (!$data['view_user']) {
+            echo "User not found with ID: " . $id;
+            exit;
+        }
+
+        $this->call->view('user/user_detail', $data);
+    }
 
     /**
      * User dashboard
@@ -58,17 +78,43 @@ class UserController extends Controller {
             redirect('user/login');
         }
 
-        // Get user statistics from auth_users
-        $users_data = $this->AuthModel->page('', 5, 1);
+        // Get user statistics from users table
+        $users_data = $this->UserModel->page('', 5, 1);
         $data['recent_users'] = $users_data['records'];
         $data['total_users'] = $users_data['total_rows'];
         $data['user'] = $this->get_current_user();
 
+        // Count administrators from users table
+        $admin_count = $this->UserModel->db->table('users')
+            ->where('role', 'admin')
+            ->select_count('*', 'count')
+            ->get()['count'];
+        $data['admin_count'] = $admin_count;
+
+        // Get all users from users table for the admin management section
+        try {
+            $usersAll = $this->UserModel->page('', null, null);
+            $data['users_all'] = $usersAll['records'];
+            $data['users_total_rows'] = $usersAll['total_rows'];
+            
+        } catch (Exception $e) {
+            $data['users_all'] = [];
+            $data['users_total_rows'] = 0;
+        }
+
+        // Get recent activity data
+        $data['recent_activity'] = $this->get_recent_activity();
+
         $this->call->view('user/admin_dashboard', $data);
     }
 
+    // create - admin only
     public function create()
     {
+        if (!$this->is_logged_in() || !$this->has_permission('admin')) {
+            redirect('user/login');
+        }
+
         if($this->io->method() == 'post') {
             $data = [
                 'username' => $this->io->post('username'),
@@ -81,30 +127,89 @@ class UserController extends Controller {
         }
     }
 
+    public function store()
+    {
+        if (!$this->is_logged_in() || !$this->has_permission('admin')) {
+            redirect('user/login');
+        }
+
+        if($this->io->method() == 'post') {
+            $data = [
+                'username' => $this->io->post('username'),
+                'email'    => $this->io->post('email')
+            ];
+            $this->UserModel->insert($data);
+            redirect('user/all'); // balik sa list after insert
+        } else {
+            $this->call->view('user/create');
+        }
+    }
+
+    // edit - admin only
+    public function edit($id)
+    {
+        if (!$this->is_logged_in() || !$this->has_permission('admin')) {
+            redirect('user/login');
+        }
+
+        $data['user'] = $this->UserModel->find($id);
+        
+        // Debug: Check if user was found
+        if (!$data['user']) {
+            echo "User not found with ID: " . $id;
+            exit;
+        }
+        
+        $this->call->view('user/edit', $data);
+    }
+
     public function update($id)
     {
+        if (!$this->is_logged_in() || !$this->has_permission('admin')) {
+            redirect('user/login');
+        }
+
         $data['user'] = $this->UserModel->find($id);
 
         if ($this->io->method() == 'post') {
             $updateData = [
                 'username' => $this->io->post('username'),
-                'email'    => $this->io->post('email')
+                'email' => $this->io->post('email'),
+                'first_name' => $this->io->post('first_name'),
+                'last_name' => $this->io->post('last_name'),
+                'role' => $this->io->post('role')
             ];
+
+            // Only update password if provided
+            $password = $this->io->post('password');
+            if (!empty($password)) {
+                $updateData['password'] = password_hash($password, PASSWORD_DEFAULT);
+            }
+
             $this->UserModel->update($id, $updateData);
-            redirect('user/all'); // balik sa list
+            redirect('user/view/'.$id); // redirect to user detail page
         } else {
-            $this->call->view('user/update', $data);
+            $this->call->view('user/edit', $data);
         }
     }
 
     public function delete($id)
     {
+        if (!$this->is_logged_in() || !$this->has_permission('admin')) {
+            redirect('user/login');
+        }
+
         $this->UserModel->delete($id);
-        redirect('user/all'); // balik sa list after delete
+        redirect('user/admin_dashboard'); // redirect to admin dashboard after delete
     }
 
     public function all() 
     {
+        // Allow all logged-in users to view the list
+        if (!$this->is_logged_in()) {
+            redirect('user/login');
+        }
+
         $page = 1;
         if(isset($_GET['page']) && ! empty($_GET['page'])) {
             $page = $this->io->get('page');
@@ -121,15 +226,20 @@ class UserController extends Controller {
         $data['all'] = $all['records'];
         $total_rows = $all['total_rows'];
 
-        // Also fetch auth_users separately (no pagination for now)
+        // Also fetch users separately (no pagination for now)
         try {
-            $authAll = $this->AuthModel->page($q, null, null);
-            $data['auth_all'] = $authAll['records'];
-            $data['auth_total_rows'] = $authAll['total_rows'];
+            $usersAll = $this->UserModel->page($q, null, null);
+            $data['users_all'] = $usersAll['records'];
+            $data['users_total_rows'] = $usersAll['total_rows'];
         } catch (Exception $e) {
-            $data['auth_all'] = [];
-            $data['auth_total_rows'] = 0;
+            $data['users_all'] = [];
+            $data['users_total_rows'] = 0;
         }
+
+        // Pass current user info to view for role-based UI
+        $data['current_user'] = $this->get_current_user();
+        $data['is_admin'] = $this->has_permission('admin');
+
         $this->pagination->set_options([
             'first_link'     => '⏮ First',
             'last_link'      => 'Last ⏭',
@@ -180,11 +290,78 @@ class UserController extends Controller {
         exit;
     }
 
-    // Helper methods
-
     /**
-     * Get current user data
+     * Get recent activity data
      */
+    private function get_recent_activity()
+    {
+        $activities = [];
+        
+        try {
+            // Get recent user registrations (from users table)
+            $recent_registrations = $this->UserModel->db->table('users')
+                ->order_by('created_at', 'DESC')
+                ->limit(3)
+                ->get();
+            
+            foreach ($recent_registrations as $user) {
+                $activities[] = [
+                    'type' => 'registration',
+                    'message' => 'New user registered: ' . $user['username'],
+                    'time' => $user['created_at'],
+                    'icon' => 'user-plus',
+                    'color' => 'success'
+                ];
+            }
+            
+            // Get recent user updates (simulate - you can add an activity log table later)
+            $recent_updates = $this->UserModel->db->table('users')
+                ->order_by('updated_at', 'DESC')
+                ->limit(2)
+                ->get();
+            
+            foreach ($recent_updates as $user) {
+                if ($user['updated_at'] && $user['updated_at'] !== $user['created_at']) {
+                    $activities[] = [
+                        'type' => 'update',
+                        'message' => 'User updated: ' . $user['username'],
+                        'time' => $user['updated_at'],
+                        'icon' => 'edit',
+                        'color' => 'warning'
+                    ];
+                }
+            }
+            
+            // Add system activities
+            $activities[] = [
+                'type' => 'system',
+                'message' => 'Admin dashboard accessed',
+                'time' => date('Y-m-d H:i:s'),
+                'icon' => 'dashboard',
+                'color' => 'info'
+            ];
+            
+            // Sort by time (most recent first)
+            usort($activities, function($a, $b) {
+                return strtotime($b['time']) - strtotime($a['time']);
+            });
+            
+            // Return only the 5 most recent activities
+            return array_slice($activities, 0, 5);
+            
+        } catch (Exception $e) {
+            // Return default activities if database query fails
+            return [
+                [
+                    'type' => 'system',
+                    'message' => 'System initialized',
+                    'time' => date('Y-m-d H:i:s'),
+                    'icon' => 'check-circle',
+                    'color' => 'success'
+                ]
+            ];
+        }
+    }
     private function get_current_user()
     {
         if (!$this->is_logged_in()) {

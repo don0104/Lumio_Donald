@@ -46,6 +46,7 @@ defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
 // Default route - redirect to auth login
 $router->get('/', 'AuthController::index');
 
+
 // Authentication routes (moved to AuthController)
 $router->match('/auth/login', 'AuthController::login', ['GET', 'POST']);
 $router->match('/auth/register', 'AuthController::register', ['GET', 'POST']);
@@ -64,6 +65,8 @@ $router->get('/admin', 'UserController::admin_dashboard');
 
 // User management routes (existing)
 $router->get('/user/all', 'UserController::all');
+$router->get('/user/view/{id}', 'UserController::view');
+$router->get('/user/edit/{id}', 'UserController::edit');
 $router->get('/user/search_ajax', 'UserController::search_ajax');
 $router->match('/user/create', 'UserController::create', ['GET', 'POST']);
 $router->match('/user/update/{id}', 'UserController::update', ['GET', 'POST']);

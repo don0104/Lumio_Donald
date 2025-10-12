@@ -79,7 +79,7 @@ $config['ENVIRONMENT']             = 'development';
 | WARNING: You MUST set this value!
 |
 */
-$config['base_url'] 				= 'https://lumiodonald.onrender.com/';
+$config['base_url'] 				= 'http://localhost/web2/Activity3/Lumio_Donald/';
 //https://lumiodonald.onrender.com/
 /*
 |--------------------------------------------------------------------------

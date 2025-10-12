@@ -3,308 +3,555 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - <?= config_item('base_url') ?></title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>Register - User Management System</title>
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>">
+    <link rel="shortcut icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #f8fafc;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             min-height: 100vh;
             display: flex;
             align-items: center;
-            padding: 2rem 0;
+            justify-content: center;
+            color: #2d3748;
+            padding: 1rem;
         }
-        .register-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        
+        /* Main Container */
+        .register-container {
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+            width: 100%;
+            max-width: 500px;
+            overflow: hidden;
+            animation: slideInUp 0.6s ease-out;
         }
-        .register-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 15px 15px 0 0;
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Form */
+        .register-form {
             padding: 2rem;
+            background: #ffffff;
+        }
+        
+        .welcome-section {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .welcome-section h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+        
+        .welcome-section p {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+        
+        /* Form Styling */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #4a5568;
+            margin-bottom: 0.5rem;
+        }
+        
+        .input-wrapper {
+            position: relative;
+        }
+        
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #a0aec0;
+            font-size: 1rem;
+            z-index: 2;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            background: #ffffff;
+            transition: all 0.3s ease;
+            color: #2d3748;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #3182ce;
+            box-shadow: 0 0 0 4px rgba(49, 130, 206, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .form-control:focus + .input-icon {
+            color: #3182ce;
+        }
+        
+        .form-control::placeholder {
+            color: #a0aec0;
+        }
+        
+        .form-select {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            background: #ffffff;
+            transition: all 0.3s ease;
+            color: #2d3748;
+        }
+        
+        .form-select:focus {
+            outline: none;
+            border-color: #3182ce;
+            box-shadow: 0 0 0 4px rgba(49, 130, 206, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        /* Checkbox */
+        .form-check {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-check-input {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #cbd5e0;
+            border-radius: 4px;
+            margin-right: 0.75rem;
+            margin-top: 0.2rem;
+            accent-color: #3182ce;
+            cursor: pointer;
+        }
+        
+        .form-check-label {
+            font-size: 0.9rem;
+            color: #4a5568;
+            cursor: pointer;
+            line-height: 1.4;
+        }
+        
+        .form-check-label a {
+            color: #3182ce;
+            text-decoration: none;
+        }
+        
+        .form-check-label a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Button */
+        .btn-register {
+            width: 100%;
+            background: linear-gradient(135deg, #3182ce 0%, #2c5aa0 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 1rem 1rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-register::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.6s;
+        }
+        
+        .btn-register:hover::before {
+            left: 100%;
+        }
+        
+        .btn-register:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(49, 130, 206, 0.4);
+        }
+        
+        .btn-register:active {
+            transform: translateY(-1px);
+        }
+        
+        .btn-register:disabled {
+            background: #a0aec0;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        /* Divider */
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 2rem 0;
+        }
+        
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #e2e8f0;
+        }
+        
+        .divider span {
+            padding: 0 1.5rem;
+            font-size: 0.8rem;
+            color: #a0aec0;
+            background: #ffffff;
+        }
+        
+        /* Login Link */
+        .login-section {
             text-align: center;
         }
-        .form-control:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        
+        .login-section p {
+            font-size: 0.9rem;
+            color: #718096;
+            margin-bottom: 0.5rem;
         }
-        .btn-register {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            border-radius: 25px;
-            padding: 12px 30px;
+        
+        .btn-login {
+            color: #3182ce;
+            text-decoration: none;
+            font-size: 0.9rem;
             font-weight: 600;
-            transition: all 0.3s ease;
+            transition: color 0.2s ease;
         }
-        .btn-register:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        
+        .btn-login:hover {
+            color: #2c5aa0;
+            text-decoration: underline;
         }
-        .input-group-text {
-            background: transparent;
-            border-right: none;
-        }
-        .form-control {
-            border-left: none;
-        }
+        
+        /* Alert */
         .alert {
-            border-radius: 10px;
+            border-radius: 12px;
+            border: none;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            animation: alertSlideIn 0.3s ease-out;
+            border-left: 4px solid;
         }
-        .password-strength {
-            height: 5px;
-            border-radius: 3px;
-            margin-top: 5px;
-            transition: all 0.3s ease;
+        
+        @keyframes alertSlideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
-        .strength-weak { background-color: #dc3545; }
-        .strength-medium { background-color: #ffc107; }
-        .strength-strong { background-color: #28a745; }
+        
+        .alert-danger {
+            background: #fef2f2;
+            color: #dc2626;
+            border-left-color: #dc2626;
+        }
+        
+        .alert-success {
+            background: #f0fdf4;
+            color: #16a34a;
+            border-left-color: #16a34a;
+        }
+        
+        /* Loading State */
+        .btn-register.loading {
+            position: relative;
+            color: transparent;
+        }
+        
+        .btn-register.loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 24px;
+            height: 24px;
+            margin: -12px 0 0 -12px;
+            border: 3px solid transparent;
+            border-top: 3px solid #ffffff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 480px) {
+            .register-container {
+                margin: 0.5rem;
+                border-radius: 16px;
+            }
+            
+            .register-form {
+                padding: 1.5rem;
+            }
+            
+            .welcome-section h2 {
+                font-size: 1.25rem;
+            }
+            
+            .form-control {
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+        }
+        
+        /* Tablet Responsive */
+        @media (min-width: 768px) {
+            .register-container {
+                max-width: 550px;
+            }
+        }
+        
+        /* Desktop Responsive */
+        @media (min-width: 1024px) {
+            .register-container {
+                max-width: 600px;
+            }
+            
+            .register-form {
+                padding: 2.5rem;
+            }
+            
+            .welcome-section h2 {
+                font-size: 1.75rem;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8 col-lg-6">
-                <div class="register-card">
-                    <div class="register-header">
-                        <i class="fas fa-user-plus fa-3x mb-3"></i>
-                        <h3 class="mb-0">Create Account</h3>
-                        <p class="mb-0">Join us today and get started</p>
+    <div class="register-container">
+        <!-- Form -->
+        <div class="register-form">
+            <div class="welcome-section">
+                <h2>Create Account</h2>
+                <p>Join our platform today</p>
+            </div>
+            
+            <?php if (isset($error)): ?>
+                <div class="alert alert-danger" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <?= $error ?>
+                </div>
+            <?php endif; ?>
+
+            <?php if (isset($errors) && !empty($errors)): ?>
+                <div class="alert alert-danger" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <ul class="mb-0">
+                        <?php foreach ($errors as $error): ?>
+                            <li><?= $error ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            <?php endif; ?>
+
+            <form method="POST" action="register" id="registerForm">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="first_name" class="form-label">First Name</label>
+                            <div class="input-wrapper">
+                                <input type="text" class="form-control" id="first_name" name="first_name" 
+                                       value="<?= isset($form_data['first_name']) ? $form_data['first_name'] : '' ?>" 
+                                       placeholder="First name" required>
+                                <i class="fas fa-user input-icon"></i>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body p-4">
-                        <?php if (isset($error)): ?>
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                <i class="fas fa-exclamation-triangle me-2"></i>
-                                <?= $error ?>
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                            </div>
-                        <?php endif; ?>
 
-                        <?php if (isset($errors) && !empty($errors)): ?>
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                <i class="fas fa-exclamation-triangle me-2"></i>
-                                <ul class="mb-0">
-                                    <?php foreach ($errors as $error): ?>
-                                        <li><?= $error ?></li>
-                                    <?php endforeach; ?>
-                                </ul>
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="last_name" class="form-label">Last Name</label>
+                            <div class="input-wrapper">
+                                <input type="text" class="form-control" id="last_name" name="last_name" 
+                                       value="<?= isset($form_data['last_name']) ? $form_data['last_name'] : '' ?>" 
+                                       placeholder="Last name" required>
+                                <i class="fas fa-user input-icon"></i>
                             </div>
-                        <?php endif; ?>
-
-                        <form method="POST" action="register" id="registerForm">
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="first_name" class="form-label">First Name</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">
-                                            <i class="fas fa-user"></i>
-                                        </span>
-                                        <input type="text" class="form-control" id="first_name" name="first_name" 
-                                               value="<?= isset($form_data['first_name']) ? $form_data['first_name'] : '' ?>" 
-                                               placeholder="First name" required>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label for="last_name" class="form-label">Last Name</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">
-                                            <i class="fas fa-user"></i>
-                                        </span>
-                                        <input type="text" class="form-control" id="last_name" name="last_name" 
-                                               value="<?= isset($form_data['last_name']) ? $form_data['last_name'] : '' ?>" 
-                                               placeholder="Last name" required>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="username" class="form-label">Username</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">
-                                        <i class="fas fa-at"></i>
-                                    </span>
-                                    <input type="text" class="form-control" id="username" name="username" 
-                                           value="<?= isset($form_data['username']) ? $form_data['username'] : '' ?>" 
-                                           placeholder="Choose a username" required>
-                                </div>
-                                <small class="text-muted">Username must be at least 3 characters long</small>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email Address</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">
-                                        <i class="fas fa-envelope"></i>
-                                    </span>
-                                    <input type="email" class="form-control" id="email" name="email" 
-                                           value="<?= isset($form_data['email']) ? $form_data['email'] : '' ?>" 
-                                           placeholder="Enter email address" required>
-                                </div>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Password</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">
-                                        <i class="fas fa-lock"></i>
-                                    </span>
-                                    <input type="password" class="form-control" id="password" name="password" 
-                                           placeholder="Create password" required>
-                                    <button type="button" class="btn btn-outline-secondary" id="togglePassword">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </div>
-                                <div class="password-strength" id="passwordStrength"></div>
-                                <small class="text-muted">Password must be at least 6 characters long</small>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="confirm_password" class="form-label">Confirm Password</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">
-                                        <i class="fas fa-lock"></i>
-                                    </span>
-                                    <input type="password" class="form-control" id="confirm_password" name="confirm_password" 
-                                           placeholder="Confirm password" required>
-                                    <button type="button" class="btn btn-outline-secondary" id="toggleConfirmPassword">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </div>
-                                <div id="passwordMatch" class="mt-1"></div>
-                            </div>
-
-                            <div class="mb-3 form-check">
-                                <input type="checkbox" class="form-check-input" id="terms" required>
-                                <label class="form-check-label" for="terms">
-                                    I agree to the <a href="#" class="text-decoration-none">Terms of Service</a> 
-                                    and <a href="#" class="text-decoration-none">Privacy Policy</a>
-                                </label>
-                            </div>
-
-                            <?php $isAdmin = isset($_SESSION['role']) && strtolower($_SESSION['role']) === 'admin'; ?>
-                            <?php if ($isAdmin): ?>
-                            <div class="mb-3">
-                                <label for="role" class="form-label">Role</label>
-                                <select class="form-select" id="role" name="role">
-                                    <option value="user" <?= (isset($form_data['role']) && $form_data['role']==='user')?'selected':''; ?>>User</option>
-                                    <option value="admin" <?= (isset($form_data['role']) && $form_data['role']==='admin')?'selected':''; ?>>Admin</option>
-                                </select>
-                            </div>
-                            <?php else: ?>
-                            <input type="hidden" name="role" value="user">
-                            <?php endif; ?>
-
-                            <div class="d-grid mb-3">
-                                <button type="submit" class="btn btn-primary btn-register">
-                                    <i class="fas fa-user-plus me-2"></i>
-                                    Create Account
-                                </button>
-                            </div>
-
-                            <div class="text-center">
-                                <p class="mb-0">Already have an account?</p>
-                                <a href="login" class="btn btn-outline-primary btn-sm mt-2">
-                                    <i class="fas fa-sign-in-alt me-2"></i>
-                                    Sign In
-                                </a>
-                            </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
+
+                <div class="form-group">
+                    <label for="username" class="form-label">Username</label>
+                    <div class="input-wrapper">
+                        <input type="text" class="form-control" id="username" name="username" 
+                               value="<?= isset($form_data['username']) ? $form_data['username'] : '' ?>" 
+                               placeholder="Choose a username" required>
+                        <i class="fas fa-at input-icon"></i>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email" class="form-label">Email Address</label>
+                    <div class="input-wrapper">
+                        <input type="email" class="form-control" id="email" name="email" 
+                               value="<?= isset($form_data['email']) ? $form_data['email'] : '' ?>" 
+                               placeholder="Enter email address" required>
+                        <i class="fas fa-envelope input-icon"></i>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" class="form-control" id="password" name="password" 
+                               placeholder="Create password" required>
+                        <i class="fas fa-lock input-icon"></i>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm_password" class="form-label">Confirm Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" class="form-control" id="confirm_password" name="confirm_password" 
+                               placeholder="Confirm password" required>
+                        <i class="fas fa-lock input-icon"></i>
+                    </div>
+                </div>
+
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="terms" required>
+                    <label class="form-check-label" for="terms">
+                        I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+                    </label>
+                </div>
+
+                <?php $isAdmin = isset($_SESSION['role']) && strtolower($_SESSION['role']) === 'admin'; ?>
+                <?php if ($isAdmin): ?>
+                <div class="form-group">
+                    <label for="role" class="form-label">Role</label>
+                    <div class="input-wrapper">
+                        <select class="form-select" id="role" name="role">
+                            <option value="user" <?= (isset($form_data['role']) && $form_data['role']==='user')?'selected':''; ?>>User</option>
+                            <option value="admin" <?= (isset($form_data['role']) && $form_data['role']==='admin')?'selected':''; ?>>Admin</option>
+                        </select>
+                        <i class="fas fa-user-tag input-icon"></i>
+                    </div>
+                </div>
+                <?php endif; ?>
+
+                <button type="submit" class="btn-register" id="registerBtn">
+                    <i class="fas fa-user-plus me-2"></i>
+                    CREATE ACCOUNT
+                </button>
+            </form>
+
+            <div class="divider">
+                <span>or</span>
+            </div>
+
+            <div class="login-section">
+                <p>Already have an account? <a href="login" class="btn-login">Sign In</a></p>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Toggle password visibility
-        document.getElementById('togglePassword').addEventListener('click', function() {
-            const password = document.getElementById('password');
-            const icon = this.querySelector('i');
-            
-            if (password.type === 'password') {
-                password.type = 'text';
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
-            } else {
-                password.type = 'password';
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
-            }
+        // Form submission with loading state
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            const btn = document.getElementById('registerBtn');
+            btn.classList.add('loading');
+            btn.disabled = true;
         });
-
-        document.getElementById('toggleConfirmPassword').addEventListener('click', function() {
-            const password = document.getElementById('confirm_password');
-            const icon = this.querySelector('i');
-            
-            if (password.type === 'password') {
-                password.type = 'text';
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
-            } else {
-                password.type = 'password';
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
-            }
-        });
-
-        // Password strength indicator
-        document.getElementById('password').addEventListener('input', function() {
-            const password = this.value;
-            const strengthBar = document.getElementById('passwordStrength');
-            
-            let strength = 0;
-            if (password.length >= 6) strength++;
-            if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength++;
-            if (password.match(/\d/)) strength++;
-            if (password.match(/[^a-zA-Z\d]/)) strength++;
-            
-            strengthBar.style.width = (strength * 25) + '%';
-            
-            if (strength <= 1) {
-                strengthBar.className = 'password-strength strength-weak';
-            } else if (strength <= 2) {
-                strengthBar.className = 'password-strength strength-medium';
-            } else {
-                strengthBar.className = 'password-strength strength-strong';
-            }
-        });
-
-        // Password match indicator
-        function checkPasswordMatch() {
+        
+        // Form validation
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirm_password').value;
-            const matchDiv = document.getElementById('passwordMatch');
             
-            if (confirmPassword === '') {
-                matchDiv.innerHTML = '';
-                return;
+            if (password !== confirmPassword) {
+                e.preventDefault();
+                alert('Passwords do not match!');
+                return false;
             }
             
-            if (password === confirmPassword) {
-                matchDiv.innerHTML = '<small class="text-success"><i class="fas fa-check me-1"></i>Passwords match</small>';
-            } else {
-                matchDiv.innerHTML = '<small class="text-danger"><i class="fas fa-times me-1"></i>Passwords do not match</small>';
+            if (password.length < 6) {
+                e.preventDefault();
+                alert('Password must be at least 6 characters long!');
+                return false;
             }
-        }
-
-        document.getElementById('password').addEventListener('input', checkPasswordMatch);
-        document.getElementById('confirm_password').addEventListener('input', checkPasswordMatch);
-
-        // Auto-dismiss alerts after 5 seconds
+        });
+        
+        // Auto-dismiss alerts
         setTimeout(function() {
             const alerts = document.querySelectorAll('.alert');
             alerts.forEach(function(alert) {
-                const bsAlert = new bootstrap.Alert(alert);
-                bsAlert.close();
+                alert.style.opacity = '0';
+                alert.style.transform = 'translateX(-20px)';
+                setTimeout(() => alert.remove(), 300);
             });
         }, 5000);
+        
+        // Add focus effects
+        document.querySelectorAll('.form-control, .form-select').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.style.borderColor = '#3182ce';
+                this.style.boxShadow = '0 0 0 4px rgba(49, 130, 206, 0.1)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.style.borderColor = '#e2e8f0';
+                this.style.boxShadow = 'none';
+            });
+        });
     </script>
 </body>
 </html>

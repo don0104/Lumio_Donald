@@ -70,6 +70,8 @@ class AuthModel extends Model {
         } else {
             $data['records'] = $query->pagination($records_per_page, $page)->get_all();
         }
+        
+        
         return $data;
     }
 

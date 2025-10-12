@@ -55,6 +55,8 @@ list($codeExcerpt, $excerptStart) = get_code_excerpt($exception->getFile(), $exc
 <head>
     <meta charset="UTF-8">
     <title>Whoops! Something went wrong.</title>
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>">
+    <link rel="shortcut icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>">
     <style>
         * { box-sizing: border-box; }
 

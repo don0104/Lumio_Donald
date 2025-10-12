@@ -79,7 +79,7 @@ $database['main'] = array(
     'charset'   => 'utf8mb4',
     'dbprefix'  => '',
     'path'      => '' // optional for SQLite
-); 
-*/
+); */
+
 
 ?>
