@@ -65,7 +65,9 @@ class UserController extends Controller
     public function dashboard()
     {
         if (!$this->is_logged_in()) {
-            redirect('auth/login');
+            echo "<h1>Access Denied</h1>";
+            echo "<p>Please <a href='" . base_url('auth/login') . "'>login</a> to access this page.</p>";
+            exit;
         }
 
         $data['user'] = $this->get_current_user();
@@ -210,7 +212,9 @@ class UserController extends Controller
     {
         // Allow all logged-in users to view the list
         if (!$this->is_logged_in()) {
-            redirect('auth/login');
+            echo "<h1>Access Denied</h1>";
+            echo "<p>Please <a href='" . base_url('auth/login') . "'>login</a> to access this page.</p>";
+            exit;
         }
 
         $page = 1;

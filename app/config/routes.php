@@ -58,6 +58,11 @@ $router->get('/test', function() {
     exit;
 });
 
+// Navigation routes for logged-in users
+$router->get('/dashboard', 'UserController::dashboard');
+$router->get('/users', 'UserController::all');
+$router->get('/admin', 'UserController::admin_dashboard');
+
 
 // Authentication routes (moved to AuthController)
 $router->match('/auth/login', 'AuthController::login', ['GET', 'POST']);

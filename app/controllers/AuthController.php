@@ -35,7 +35,6 @@ class AuthController extends Controller {
 
     public function login()
     {
-        // Always show the login page, no redirects
         $data = [];
         if ($this->is_logged_in()) {
             $data['message'] = 'You are already logged in.';
@@ -84,9 +83,10 @@ class AuthController extends Controller {
                     $this->set_remember_cookie($result['user']['id']);
                 }
 
-                // Show success message instead of redirecting
+                // Show success message with navigation links
                 $data['success'] = 'Login successful! You are now logged in.';
                 $data['user_role'] = $result['user']['role'];
+                $data['show_navigation'] = true;
                 $this->call->view('user/login', $data);
                 return;
             } else {
@@ -96,13 +96,12 @@ class AuthController extends Controller {
             }
         } else {
             $this->check_remember_cookie();
-            $this->call->view('user/login');
+            $this->call->view('user/login', $data);
         }
     }
 
     public function register()
     {
-        // Always show the register page, no redirects
         $data = [];
         if ($this->is_logged_in()) {
             $role = isset($_SESSION['role']) ? strtolower($_SESSION['role']) : 'user';
@@ -112,7 +111,7 @@ class AuthController extends Controller {
         }
 
         if ($this->io->method() == 'post') {
-            $data = [
+            $form_data = [
                 'username' => $this->io->post('username'),
                 'email' => $this->io->post('email'),
                 'password' => $this->io->post('password'),
@@ -121,11 +120,11 @@ class AuthController extends Controller {
             ];
             $confirm_password = $this->io->post('confirm_password');
 
-            $errors = $this->validate_registration($data, $confirm_password);
+            $errors = $this->validate_registration($form_data, $confirm_password);
             if (!empty($errors)) {
-                $view_data['errors'] = $errors;
-                $view_data['form_data'] = $data;
-                $this->call->view('user/register', $view_data);
+                $data['errors'] = $errors;
+                $data['form_data'] = $form_data;
+                $this->call->view('user/register', $data);
                 return;
             }
 
@@ -146,20 +145,21 @@ class AuthController extends Controller {
                 // ignore and default to current allowAdmin
             }
 
-            $data['role'] = ($allowAdmin && $requestedRole === 'admin') ? 'admin' : 'user';
+            $form_data['role'] = ($allowAdmin && $requestedRole === 'admin') ? 'admin' : 'user';
 
-            $result = $this->AuthModel->register($data);
+            $result = $this->AuthModel->register($form_data);
 
             if ($result['success']) {
-                $view_data['success'] = $result['message'];
-                $this->call->view('user/login', $view_data);
+                $data['success'] = $result['message'];
+                $data['show_navigation'] = true;
+                $this->call->view('user/register', $data);
             } else {
-                $view_data['error'] = $result['message'];
-                $view_data['form_data'] = $data;
-                $this->call->view('user/register', $view_data);
+                $data['error'] = $result['message'];
+                $data['form_data'] = $form_data;
+                $this->call->view('user/register', $data);
             }
         } else {
-            $this->call->view('user/register');
+            $this->call->view('user/register', $data);
         }
     }
 
