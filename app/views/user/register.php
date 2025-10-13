@@ -401,7 +401,20 @@
                 </div>
             <?php endif; ?>
 
-            <form method="POST" action="register" id="registerForm">
+            <?php if (isset($success)): ?>
+                <div class="alert alert-success" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>
+                    <?= $success ?>
+                    <?php if (isset($show_navigation) && $show_navigation): ?>
+                        <div class="mt-3">
+                            <a href="<?php echo base_url('auth/login'); ?>" class="btn btn-primary me-2">Go to Login</a>
+                            <a href="<?php echo base_url(); ?>" class="btn btn-outline-primary">Back to Home</a>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
+
+            <form method="POST" action="<?php echo base_url('auth/register'); ?>" id="registerForm">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -498,7 +511,7 @@
             </div>
 
             <div class="login-section">
-                <p>Already have an account? <a href="login" class="btn-login">Sign In</a></p>
+                <p>Already have an account? <a href="<?php echo base_url('auth/login'); ?>" class="btn-login">Sign In</a></p>
             </div>
         </div>
     </div>
