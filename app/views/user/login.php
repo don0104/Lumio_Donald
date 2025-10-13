@@ -468,17 +468,17 @@
                     <?= $success ?>
                     <?php if (isset($show_navigation) && $show_navigation): ?>
                         <div class="mt-3">
-                            <a href="<?php echo base_url('dashboard'); ?>" class="btn btn-primary me-2">Go to Dashboard</a>
-                            <a href="<?php echo base_url('users'); ?>" class="btn btn-outline-primary me-2">View Users</a>
+                            <a href="<?php echo base_url('user/dashboard'); ?>" class="btn btn-primary me-2">Go to Dashboard</a>
+                            <a href="<?php echo base_url('user/all'); ?>" class="btn btn-outline-primary me-2">View Users</a>
                             <?php if (isset($user_role) && $user_role === 'admin'): ?>
-                                <a href="<?php echo base_url('admin'); ?>" class="btn btn-outline-success">Admin Panel</a>
+                                <a href="<?php echo base_url('user/admin_dashboard'); ?>" class="btn btn-outline-success">Admin Panel</a>
                             <?php endif; ?>
                         </div>
                     <?php endif; ?>
                 </div>
             <?php endif; ?>
 
-            <form method="POST" action="<?php echo base_url('auth/login'); ?>" id="loginForm">
+            <form method="POST" action="<?php echo base_url('user/login'); ?>" id="loginForm">
                 <div class="form-group">
                     <label for="username" class="form-label">Email ID</label>
                     <div class="input-wrapper">
@@ -518,7 +518,7 @@
             </div>
 
             <div class="register-section">
-                <p>Don't have an account? <a href="<?php echo base_url('auth/register'); ?>" class="btn-register">Register here</a></p>
+                <p>Don't have an account? <a href="<?php echo base_url('user/register'); ?>" class="btn-register">Register here</a></p>
             </div>
         </div>
     </div>

@@ -56,8 +56,8 @@ $router->get('/test', function() {
     echo "<p>Time: " . date('Y-m-d H:i:s') . "</p>";
     echo "<h3>Controller-based routes:</h3>";
     echo "<p><a href='" . base_url() . "'>Go to Home</a></p>";
-    echo "<p><a href='" . base_url('auth/register') . "'>Go to Register (Controller)</a></p>";
-    echo "<p><a href='" . base_url('auth/login') . "'>Go to Login (Controller)</a></p>";
+    echo "<p><a href='" . base_url('user/register') . "'>Go to Register (Controller)</a></p>";
+    echo "<p><a href='" . base_url('user/login') . "'>Go to Login (Controller)</a></p>";
     echo "<h3>Simple function-based routes:</h3>";
     echo "<p><a href='" . base_url('auth/register-simple') . "'>Go to Register (Simple)</a></p>";
     echo "<p><a href='" . base_url('auth/login-simple') . "'>Go to Login (Simple)</a></p>";
