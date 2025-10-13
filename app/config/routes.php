@@ -54,9 +54,17 @@ $router->get('/test', function() {
     echo "<h1>Test Page</h1>";
     echo "<p>Application is working!</p>";
     echo "<p>Time: " . date('Y-m-d H:i:s') . "</p>";
+    echo "<h3>Controller-based routes:</h3>";
     echo "<p><a href='" . base_url() . "'>Go to Home</a></p>";
-    echo "<p><a href='" . base_url('auth/register') . "'>Go to Register</a></p>";
-    echo "<p><a href='" . base_url('auth/login') . "'>Go to Login</a></p>";
+    echo "<p><a href='" . base_url('auth/register') . "'>Go to Register (Controller)</a></p>";
+    echo "<p><a href='" . base_url('auth/login') . "'>Go to Login (Controller)</a></p>";
+    echo "<h3>Simple function-based routes:</h3>";
+    echo "<p><a href='" . base_url('auth/register-simple') . "'>Go to Register (Simple)</a></p>";
+    echo "<p><a href='" . base_url('auth/login-simple') . "'>Go to Login (Simple)</a></p>";
+    echo "<h3>Test routes:</h3>";
+    echo "<p><a href='" . base_url('register-test') . "'>Register Test</a></p>";
+    echo "<p><a href='" . base_url('login-test') . "'>Login Test</a></p>";
+    echo "<p><a href='" . base_url('auth/test') . "'>Auth Test</a></p>";
     exit;
 });
 
@@ -67,6 +75,68 @@ $router->get('/register-test', function() {
     echo "<p><a href='" . base_url() . "'>Go to Home</a></p>";
     exit;
 });
+
+// Simple login test route
+$router->get('/login-test', function() {
+    echo "<h1>Login Test Page</h1>";
+    echo "<p>Login route is working!</p>";
+    echo "<p><a href='" . base_url() . "'>Go to Home</a></p>";
+    exit;
+});
+
+// Test if auth routes work
+$router->get('/auth/test', function() {
+    echo "<h1>Auth Test Page</h1>";
+    echo "<p>Auth routes are working!</p>";
+    echo "<p><a href='" . base_url() . "'>Go to Home</a></p>";
+    exit;
+});
+
+// Simple function-based login route
+$router->match('/auth/login-simple', function() {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        echo "<h1>Login Form Submitted</h1>";
+        echo "<p>Username: " . ($_POST['username'] ?? 'Not provided') . "</p>";
+        echo "<p>Password: " . (isset($_POST['password']) ? 'Provided' : 'Not provided') . "</p>";
+        echo "<p><a href='" . base_url() . "'>Go to Home</a></p>";
+        exit;
+    } else {
+        echo "<h1>Simple Login Page</h1>";
+        echo "<form method='POST'>";
+        echo "<p><input type='text' name='username' placeholder='Username' required></p>";
+        echo "<p><input type='password' name='password' placeholder='Password' required></p>";
+        echo "<p><button type='submit'>Login</button></p>";
+        echo "</form>";
+        echo "<p><a href='" . base_url() . "'>Go to Home</a></p>";
+        exit;
+    }
+}, ['GET', 'POST']);
+
+// Simple function-based register route
+$router->match('/auth/register-simple', function() {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        echo "<h1>Register Form Submitted</h1>";
+        echo "<p>Username: " . ($_POST['username'] ?? 'Not provided') . "</p>";
+        echo "<p>Email: " . ($_POST['email'] ?? 'Not provided') . "</p>";
+        echo "<p>First Name: " . ($_POST['first_name'] ?? 'Not provided') . "</p>";
+        echo "<p>Last Name: " . ($_POST['last_name'] ?? 'Not provided') . "</p>";
+        echo "<p><a href='" . base_url() . "'>Go to Home</a></p>";
+        exit;
+    } else {
+        echo "<h1>Simple Register Page</h1>";
+        echo "<form method='POST'>";
+        echo "<p><input type='text' name='username' placeholder='Username' required></p>";
+        echo "<p><input type='email' name='email' placeholder='Email' required></p>";
+        echo "<p><input type='text' name='first_name' placeholder='First Name' required></p>";
+        echo "<p><input type='text' name='last_name' placeholder='Last Name' required></p>";
+        echo "<p><input type='password' name='password' placeholder='Password' required></p>";
+        echo "<p><input type='password' name='confirm_password' placeholder='Confirm Password' required></p>";
+        echo "<p><button type='submit'>Register</button></p>";
+        echo "</form>";
+        echo "<p><a href='" . base_url() . "'>Go to Home</a></p>";
+        exit;
+    }
+}, ['GET', 'POST']);
 
 // Navigation routes for logged-in users
 $router->get('/dashboard', 'UserController::dashboard');
