@@ -10,7 +10,7 @@
 
     # --------------------------------------------------
     # Deny access to sensitive directories
-    RedirectMatch 403 ^/web2/Activity3/Lumio_Donald/(app|scheme|console|runtime)/
+    RedirectMatch 403 ^/(app|scheme|console|runtime)/
 
     # --------------------------------------------------
     # Deny access to sensitive files
