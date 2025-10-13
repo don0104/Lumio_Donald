@@ -79,7 +79,7 @@ $config['ENVIRONMENT']             = 'development';
 | WARNING: You MUST set this value!
 |
 */
-$config['base_url'] 				= 'https://lumiodonald.onrender.com/';
+$config['base_url'] 				= 'https://lumio-donald.onrender.com/';
 //https://lumiodonald.onrender.com/
 /*
 |--------------------------------------------------------------------------
