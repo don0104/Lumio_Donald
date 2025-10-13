@@ -46,6 +46,9 @@ defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
 // Default route - redirect to auth login
 $router->get('/', 'AuthController::index');
 
+// Debug route to test if the application is working
+$router->get('/debug', 'AuthController::debug');
+
 
 // Authentication routes (moved to AuthController)
 $router->match('/auth/login', 'AuthController::login', ['GET', 'POST']);

@@ -21,22 +21,29 @@ class AuthController extends Controller {
         if (!$this->is_logged_in()) {
             redirect('auth/login');
         } else {
-            $role = isset($_SESSION['role']) ? strtolower($_SESSION['role']) : 'user';
-            if ($role === 'admin') {
-                redirect('user/admin_dashboard');
-            }
-            redirect('user/all');
+            // Direct redirect to login page to avoid any potential loops
+            redirect('auth/login');
         }
+    }
+
+    public function debug()
+    {
+        echo "<h1>Debug Page</h1>";
+        echo "<p>Application is working!</p>";
+        echo "<p>Session status: " . (session_status() === PHP_SESSION_ACTIVE ? 'Active' : 'Not Active') . "</p>";
+        echo "<p>Logged in: " . ($this->is_logged_in() ? 'Yes' : 'No') . "</p>";
+        echo "<p>Base URL: " . base_url() . "</p>";
+        echo "<p><a href='" . base_url('auth/login') . "'>Go to Login</a></p>";
+        exit;
     }
 
     public function login()
     {
         if ($this->is_logged_in()) {
-            $role = isset($_SESSION['role']) ? strtolower($_SESSION['role']) : 'user';
-            if ($role === 'admin') {
-                redirect('user/admin_dashboard');
-            }
-            redirect('user/all');
+            // If already logged in, show the login page with a message
+            $data['message'] = 'You are already logged in.';
+            $this->call->view('user/login', $data);
+            return;
         }
 
         if ($this->io->method() == 'post') {
