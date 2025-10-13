@@ -10,7 +10,7 @@
 
     # --------------------------------------------------
     # Deny access to sensitive directories
-    RedirectMatch 403 ^/(app|scheme|console|runtime)/
+    RewriteRule ^(app|scheme|console|runtime)(/.*|$) - [F]
 
     # --------------------------------------------------
     # Deny access to sensitive files
