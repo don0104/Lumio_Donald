@@ -18,12 +18,8 @@ class AuthController extends Controller {
 
     public function index()
     {
-        if (!$this->is_logged_in()) {
-            redirect('auth/login');
-        } else {
-            // Direct redirect to login page to avoid any potential loops
-            redirect('auth/login');
-        }
+        // Instead of redirecting, directly show the login page
+        $this->call->view('user/login');
     }
 
     public function debug()
@@ -39,11 +35,10 @@ class AuthController extends Controller {
 
     public function login()
     {
+        // Always show the login page, no redirects
+        $data = [];
         if ($this->is_logged_in()) {
-            // If already logged in, show the login page with a message
             $data['message'] = 'You are already logged in.';
-            $this->call->view('user/login', $data);
-            return;
         }
 
         if ($this->io->method() == 'post') {
@@ -89,11 +84,11 @@ class AuthController extends Controller {
                     $this->set_remember_cookie($result['user']['id']);
                 }
 
-                // Role-based redirect after login
-                if (isset($result['user']['role']) && strtolower($result['user']['role']) === 'admin') {
-                    redirect('user/admin_dashboard');
-                }
-                redirect('user/all');
+                // Show success message instead of redirecting
+                $data['success'] = 'Login successful! You are now logged in.';
+                $data['user_role'] = $result['user']['role'];
+                $this->call->view('user/login', $data);
+                return;
             } else {
                 $data['error'] = $result['message'];
                 $data['username'] = $username;
@@ -107,12 +102,12 @@ class AuthController extends Controller {
 
     public function register()
     {
+        // Always show the register page, no redirects
+        $data = [];
         if ($this->is_logged_in()) {
             $role = isset($_SESSION['role']) ? strtolower($_SESSION['role']) : 'user';
-            // Allow admins to access the registration form to add users/admins
             if ($role !== 'admin') {
-                // Non-admin logged-in users shouldn't access public register; redirect them
-                redirect('user/all');
+                $data['message'] = 'You are already logged in.';
             }
         }
 

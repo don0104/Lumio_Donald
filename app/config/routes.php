@@ -49,6 +49,15 @@ $router->get('/', 'AuthController::index');
 // Debug route to test if the application is working
 $router->get('/debug', 'AuthController::debug');
 
+// Simple test route
+$router->get('/test', function() {
+    echo "<h1>Test Page</h1>";
+    echo "<p>Application is working!</p>";
+    echo "<p>Time: " . date('Y-m-d H:i:s') . "</p>";
+    echo "<p><a href='" . base_url() . "'>Go to Home</a></p>";
+    exit;
+});
+
 
 // Authentication routes (moved to AuthController)
 $router->match('/auth/login', 'AuthController::login', ['GET', 'POST']);

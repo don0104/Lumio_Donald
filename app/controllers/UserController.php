@@ -28,16 +28,15 @@ class UserController extends Controller
     // list - everyone
     public function index()
     {
-        // Redirect to login if not authenticated, otherwise to dashboard
-        if (!$this->is_logged_in()) {
-            redirect('auth/login');
-        } else {
+        // Show a simple message instead of redirecting
+        echo "<h1>User Controller Index</h1>";
+        echo "<p>Logged in: " . ($this->is_logged_in() ? 'Yes' : 'No') . "</p>";
+        if ($this->is_logged_in()) {
             $role = isset($_SESSION['role']) ? strtolower($_SESSION['role']) : 'user';
-            if ($role === 'admin') {
-                redirect('user/admin_dashboard');
-            }
-            redirect('user/all');
+            echo "<p>Role: " . $role . "</p>";
         }
+        echo "<p><a href='" . base_url() . "'>Go to Home</a></p>";
+        exit;
     }
 
     // view individual user - everyone
