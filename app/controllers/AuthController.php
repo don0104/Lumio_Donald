@@ -18,6 +18,14 @@ class AuthController extends Controller {
 
     public function index()
     {
+        // Debug: Check if method is being called
+        if (isset($_GET['debug'])) {
+            echo "<h1>Index Method Called</h1>";
+            echo "<p>Session status: " . (session_status() === PHP_SESSION_ACTIVE ? 'Active' : 'Not Active') . "</p>";
+            echo "<p>Logged in: " . ($this->is_logged_in() ? 'Yes' : 'No') . "</p>";
+            exit;
+        }
+
         // Instead of redirecting, directly show the login page
         $this->call->view('user/login');
     }
@@ -35,6 +43,15 @@ class AuthController extends Controller {
 
     public function login()
     {
+        // Debug: Check if method is being called
+        if (isset($_GET['debug'])) {
+            echo "<h1>Login Method Called</h1>";
+            echo "<p>Method: " . $this->io->method() . "</p>";
+            echo "<p>Session status: " . (session_status() === PHP_SESSION_ACTIVE ? 'Active' : 'Not Active') . "</p>";
+            echo "<p>Logged in: " . ($this->is_logged_in() ? 'Yes' : 'No') . "</p>";
+            exit;
+        }
+
         $data = [];
         if ($this->is_logged_in()) {
             $data['message'] = 'You are already logged in.';
@@ -102,6 +119,14 @@ class AuthController extends Controller {
 
     public function register()
     {
+        // Debug: Check if method is being called
+        if (isset($_GET['debug'])) {
+            echo "<h1>Register Method Called</h1>";
+            echo "<p>Method: " . $this->io->method() . "</p>";
+            echo "<p>Session status: " . (session_status() === PHP_SESSION_ACTIVE ? 'Active' : 'Not Active') . "</p>";
+            exit;
+        }
+
         $data = [];
         if ($this->is_logged_in()) {
             $role = isset($_SESSION['role']) ? strtolower($_SESSION['role']) : 'user';

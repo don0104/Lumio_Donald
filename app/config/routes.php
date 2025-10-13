@@ -55,6 +55,16 @@ $router->get('/test', function() {
     echo "<p>Application is working!</p>";
     echo "<p>Time: " . date('Y-m-d H:i:s') . "</p>";
     echo "<p><a href='" . base_url() . "'>Go to Home</a></p>";
+    echo "<p><a href='" . base_url('auth/register') . "'>Go to Register</a></p>";
+    echo "<p><a href='" . base_url('auth/login') . "'>Go to Login</a></p>";
+    exit;
+});
+
+// Simple register test route
+$router->get('/register-test', function() {
+    echo "<h1>Register Test Page</h1>";
+    echo "<p>Register route is working!</p>";
+    echo "<p><a href='" . base_url() . "'>Go to Home</a></p>";
     exit;
 });
 
