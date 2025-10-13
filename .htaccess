@@ -2,28 +2,18 @@
     RewriteEngine On
     RewriteBase /
 
-    # --------------------------------------------------
-    # Allow index.php
-    <Files "index.php">
-        Require all granted
-    </Files>
-
-    # --------------------------------------------------
-    # Deny access to sensitive directories
+    # Security: Block access to sensitive directories
     RewriteRule ^(app|scheme|console|runtime)(/.*|$) - [F]
 
-    # --------------------------------------------------
-    # Deny access to sensitive files
+    # Security: Block access to sensitive files
     <FilesMatch "\.(env|json|xml|log|md|lock|git|ini|bak|sql)$">
         Require all denied
     </FilesMatch>
 
-    # --------------------------------------------------
-    # Prevent directory browsing
+    # Disable directory browsing
     Options -Indexes
 
-    # --------------------------------------------------
-    # Route all requests through index.php
+    # Route all requests to index.php
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)$ index.php?/$1 [QSA,L]

@@ -30,9 +30,13 @@ class UserController extends Controller
     {
         // Redirect to login if not authenticated, otherwise to dashboard
         if (!$this->is_logged_in()) {
-            redirect('user/login');
+            redirect('auth/login');
         } else {
-            redirect('user/dashboard');
+            $role = isset($_SESSION['role']) ? strtolower($_SESSION['role']) : 'user';
+            if ($role === 'admin') {
+                redirect('user/admin_dashboard');
+            }
+            redirect('user/all');
         }
     }
 
@@ -40,7 +44,7 @@ class UserController extends Controller
     public function view($id)
     {
         if (!$this->is_logged_in()) {
-            redirect('user/login');
+            redirect('auth/login');
         }
 
         $data['user'] = $this->get_current_user();
@@ -62,7 +66,7 @@ class UserController extends Controller
     public function dashboard()
     {
         if (!$this->is_logged_in()) {
-            redirect('user/login');
+            redirect('auth/login');
         }
 
         $data['user'] = $this->get_current_user();
@@ -75,7 +79,7 @@ class UserController extends Controller
     public function admin_dashboard()
     {
         if (!$this->is_logged_in() || !$this->has_permission('admin')) {
-            redirect('user/login');
+            redirect('auth/login');
         }
 
         // Get user statistics from users table
@@ -112,7 +116,7 @@ class UserController extends Controller
     public function create()
     {
         if (!$this->is_logged_in() || !$this->has_permission('admin')) {
-            redirect('user/login');
+            redirect('auth/login');
         }
 
         if($this->io->method() == 'post') {
@@ -130,7 +134,7 @@ class UserController extends Controller
     public function store()
     {
         if (!$this->is_logged_in() || !$this->has_permission('admin')) {
-            redirect('user/login');
+            redirect('auth/login');
         }
 
         if($this->io->method() == 'post') {
@@ -149,7 +153,7 @@ class UserController extends Controller
     public function edit($id)
     {
         if (!$this->is_logged_in() || !$this->has_permission('admin')) {
-            redirect('user/login');
+            redirect('auth/login');
         }
 
         $data['user'] = $this->UserModel->find($id);
@@ -166,7 +170,7 @@ class UserController extends Controller
     public function update($id)
     {
         if (!$this->is_logged_in() || !$this->has_permission('admin')) {
-            redirect('user/login');
+            redirect('auth/login');
         }
 
         $data['user'] = $this->UserModel->find($id);
@@ -196,7 +200,7 @@ class UserController extends Controller
     public function delete($id)
     {
         if (!$this->is_logged_in() || !$this->has_permission('admin')) {
-            redirect('user/login');
+            redirect('auth/login');
         }
 
         $this->UserModel->delete($id);
@@ -207,7 +211,7 @@ class UserController extends Controller
     {
         // Allow all logged-in users to view the list
         if (!$this->is_logged_in()) {
-            redirect('user/login');
+            redirect('auth/login');
         }
 
         $page = 1;

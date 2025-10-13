@@ -80,7 +80,6 @@ $config['ENVIRONMENT']             = 'development';
 |
 */
 $config['base_url'] 				= 'https://lumio-donald.onrender.com/';
-//https://lumiodonald.onrender.com/
 /*
 |--------------------------------------------------------------------------
 | Index File
@@ -213,8 +212,8 @@ $config['sess_driver']             = 'file';
 $config['sess_cookie_name']        = 'LLSession';
 $config['sess_expiration']         = 7200;
 $config['sess_save_path']          = '';
-$config['sess_match_ip']           = TRUE;
-$config['sess_match_fingerprint']  = TRUE;
+$config['sess_match_ip']           = FALSE;
+$config['sess_match_fingerprint']  = FALSE;
 $config['sess_time_to_update']     = 300;
 $config['sess_regenerate_destroy'] = TRUE;
 $config['sess_expire_on_close']    = FALSE;
@@ -231,9 +230,9 @@ $config['sess_expire_on_close']    = FALSE;
 $config['cookie_prefix']           = '';
 $config['cookie_domain']           = '';
 $config['cookie_path']             = '/';
-$config['cookie_secure']           = FALSE;
+$config['cookie_secure']           = TRUE;
 $config['cookie_expiration']       = 86400;
-$config['cookie_httponly']         = FALSE;
+$config['cookie_httponly']         = TRUE;
 $config['cookie_samesite']         = 'Lax';
 
 /*

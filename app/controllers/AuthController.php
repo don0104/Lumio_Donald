@@ -32,7 +32,11 @@ class AuthController extends Controller {
     public function login()
     {
         if ($this->is_logged_in()) {
-            redirect('user/dashboard');
+            $role = isset($_SESSION['role']) ? strtolower($_SESSION['role']) : 'user';
+            if ($role === 'admin') {
+                redirect('user/admin_dashboard');
+            }
+            redirect('user/all');
         }
 
         if ($this->io->method() == 'post') {
